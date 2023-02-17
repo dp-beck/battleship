@@ -1,14 +1,32 @@
 const path = require("path");
 const ESLintPlugin = require("eslint-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: "./src/index.js",
+  mode: "development",
+  entry: {
+    index: "./src/index.js",
+    shipFactory: "./src/ship-factory.js",
+  },
+  devtool: 'inline-source-map',
+  devServer: {
+    static: './dist',
+  },
   output: {
-    filename: "bundle.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
+    clean: true,
+  },
+  optimization: {
+    runtimeChunk: 'single',
   },
   // eslint-disable-next-line no-undef
-  plugins: [new ESLintPlugin(options)],
+  plugins: [
+    new ESLintPlugin(),
+    new HtmlWebpackPlugin({
+      title: "Battleship",
+    }),
+  ],
   module: {
     rules: [
       {
