@@ -1,4 +1,4 @@
-const createShip = require('./ship-factory');
+const createShip = require('../ship-factory');
 
 const battleship = createShip('battleship', 4);
 
