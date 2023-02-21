@@ -8,6 +8,7 @@ module.exports = {
     index: "./src/index.js",
     shipFactory: "./src/ship-factory.js",
     gameboardFactory: "./src/gameboard-factory.js",
+    playerFactory: "./src/player-factory.js",
   },
   devtool: 'inline-source-map',
   devServer: {
