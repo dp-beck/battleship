@@ -1,10 +1,10 @@
 const createGameboard = require('./gameboard-factory');
 
-function getRandomCoordinate(player) {
+function getRandomAttackCoordinate(player) {
     // pick random coordinate
     const position = player.gameboard.board[Math.floor(Math.random() * 100)];
     if (position.firedUpon) {
-        getRandomCoordinate(player);
+        getRandomAttackCoordinate(player);
     };
     return position.coordinate;
 }
@@ -19,8 +19,18 @@ export default function createPlayer(name, isComputer) {
         name,
         isComputer,
         gameboard,
-        launchAttack(opponent, coordinate = getRandomCoordinate(opponent)) {
+        launchAttack(opponent, coordinate = getRandomAttackCoordinate(opponent)) {
             opponent.gameboard.receiveAttack(coordinate);
+        },
+        randomlyPlaceAllShips (ships = []) {
+            ships.forEach((ship) => {
+                this.gameboard.placeShip(ship.name, ship.length, this.gameboard.generateRandomCoordinatesNoOverlap(ship.length));
+            })
+        // carrier - 5 spaces
+        // battleship - 4 spaces
+        // destroyer - 3 spaces
+        // submarine - 3 spaces
+        // patrol boat - 2 spaces
         },
     };
 }

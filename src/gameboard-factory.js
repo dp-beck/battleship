@@ -20,7 +20,31 @@ function createBoard () {
     return board;
 };
 
-// receiveAttack function
+// returns an array of legal coordinates the size of the ship length
+function generateRandomShipCoordinates (length) {
+    const randomShipCoordinates = [];
+    const possibleLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    const horizontalOrVertical = Math.floor(Math.random() * 2);
+    const startingLetterIndex = Math.floor(Math.random() * 10);
+    const startingNumber = Math.floor(Math.random() * (11-length)) + 1;
+    if (horizontalOrVertical === 0) { // horizontal placement
+        for (let i = 0; i < length; i+=1) {
+            randomShipCoordinates.push(possibleLetters[startingLetterIndex] + (startingNumber + i));
+        };
+    } else { // vertical placement
+        for (let i = 0; i < length; i+= 1) {
+            randomShipCoordinates.push(possibleLetters[startingLetterIndex + i] + startingNumber);
+        };
+    };
+    
+    return randomShipCoordinates;
+}
+
+// returns 0 if no overlap
+function testForOverlap (coordinates = []) {
+    const result = coordinates.reduce((accumulator, currentValue) => accumulator + currentValue.containsShip);
+    return result;
+}
 
 export default function createGameboard () {
     const board = createBoard();
@@ -35,6 +59,13 @@ export default function createGameboard () {
                 position.containsShip = shipName;
             });
         },
+        generateRandomShipCoordinatesNoOverlap (length) {
+            let coordinates = generateRandomShipCoordinates(length);
+            while (testForOverlap(coordinates !== 0)) {
+                coordinates = generateRandomShipCoordinates(length);
+            };
+            return coordinates;
+            },
         receiveAttack (coordinate) {
             const position = this.board.find(element => element.coordinate === coordinate);
             position.firedUpon = true;

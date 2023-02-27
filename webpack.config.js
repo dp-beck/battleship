@@ -27,6 +27,7 @@ module.exports = {
     new ESLintPlugin(),
     new HtmlWebpackPlugin({
       title: "Battleship",
+      template: path.resolve(__dirname, './src/template.html'),
     }),
   ],
   module: {
