@@ -26,11 +26,7 @@ export default function createPlayer(name, isComputer) {
             ships.forEach((ship) => {
                 this.gameboard.placeShip(ship.name, ship.length, this.gameboard.generateRandomCoordinatesNoOverlap(ship.length));
             })
-        // carrier - 5 spaces
-        // battleship - 4 spaces
-        // destroyer - 3 spaces
-        // submarine - 3 spaces
-        // patrol boat - 2 spaces
+       
         },
     };
 }

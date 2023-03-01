@@ -1,12 +1,17 @@
-import createPlayer from "./player-factory";
+const updateDisplay = require('./display-updater');
+
+// helper function to enable a delay between turns
+function sleep (milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+  }
 
 // Will run on click from a Start Button
-function initializeGame () {
-    // 1. Create Players
-    const player1 = createPlayer("Player 1", false);
-    const player2 = createPlayer("Player 2", true);
-
-    // 2. Initialize Ship List
+function startGame (player1, player2) {
+    // 1. Initialize Ship List
     const ships = [
         {
             name: "carrier",
@@ -30,28 +35,52 @@ function initializeGame () {
         }
     ];
 
-    // 3. Place ships on the boards randomly
+    // 2. Place ships on the boards randomly
     player1.randomlyPlaceAllShips(ships);
     player2.randomlyPlaceAllShips(ships);
- 
-    // 4. MAIN GAME LOOP
-    while (!(player1.gameBoard.haveSunkAllShips() || player2.gameBoard.haveSunkAllShips())) {
-   /* 1. Player Turn
-        a. Player picks a place to fire upon
-        b. Player fires on that place and opponent's gameboard is updated
-        c. Call Display Updater to show change
-        d. Check to see if the hit sunk a ship.
-        e. If the hit sunk a ship, 
-            i. Pass a message declaring which ship was sunk
-            ii. Add the image of the sunk ship on the gameboard to show what was sunk.
-            iii. Run Display Updater to show new board conditions
-        f. Check to see if All Ships are Sunk. If yes,
-            i. Loop Breaks and we continue to the end game
-            ii. if no, continue loop with next player
-    */
-    };
-    /* TO DO: END GAME
-    2. Pass a Message as to who won
-    3. Run Display Updater to show End Game
-    */
+
+    // 3. Initialize Message
+    const message = `Let's Play!`;
+    updateDisplay(message);
 }
+
+function playerTurn (player, opponent, firePosition) {
+    let isGameOver = false;
+    let message;
+    player.launchAttack(opponent, firePosition);
+    const shipName = opponent.gameboard.board.find(element => element.coordinate === firePosition).containsShip;
+    const shipIsSunk = opponent.gameboard.ships.find(element => element.nane === shipName).isSunk();
+    if (shipIsSunk) {
+        message = `\n ${player.name} sank ${opponent.name}'s ${shipName}!!`;
+    };
+    if (opponent.gameboard.haveSunkAllShips()) {
+        message = `\n ${player.name} sank all of ${opponent.name}'s ships. ${player.name} wins!!!`;
+        isGameOver = true;
+    };
+    updateDisplay(message);
+    return isGameOver;
+}
+
+// END GAME by disabling clicks
+function endGame() {
+    document.querySelector('body').style['pointer-events'] = "none";
+}
+
+// Will run on a mouse click
+function mainGameLoop (human, computer, positionClicked) {
+    let isGameOver = playerTurn(human, computer, positionClicked);
+    if (isGameOver) {
+        endGame();
+    };
+    sleep(1000);
+    isGameOver = playerTurn(computer, human);
+    if (isGameOver) {
+        endGame();
+    };
+    sleep(1000);
+}
+
+
+// TO DO == AM I EXPORTING THESE RIGHT???
+exports.startGame = startGame; 
+exports.mainGameLoop = mainGameLoop;

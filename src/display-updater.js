@@ -1,7 +1,9 @@
+const { mainGameLoop } = require("./game-logic");
+
 // When this function is called, the screen should display the current state of the
 // game.
 
-function displayUpdater() {
+function displayUpdater(message) {
     /* Render Ships that need to be placed on board
     */
    
