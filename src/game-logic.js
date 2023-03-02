@@ -1,4 +1,4 @@
-const updateDisplay = require('./display-updater');
+const updateDisplay = require('./index');
 
 // helper function to enable a delay between turns
 function sleep (milliseconds) {

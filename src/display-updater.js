@@ -1,12 +1,36 @@
 const { mainGameLoop } = require("./game-logic");
+// YOU KNOW MAYBE THIS SHOULD BE IN INDEX AFTER ALL!!
 
 // When this function is called, the screen should display the current state of the
 // game.
 
-function displayUpdater(message) {
-    /* Render Ships that need to be placed on board
-    */
-   
+// TO DO: Delete existing boards
+
+// Render a board
+function updateBoard(player) {
+    const board = document.createElement("div");
+    // NOTE: NEED TO DEFINE BOARD STYLE IN CSS
+    board.classList.add("boardStyle");
+    document.querySelector("body").append(board);
+    player.gameboard.board.forEach((position) => {
+        const square = document.createElement("div");
+        board.prepend(square);
+        if (player.isComputer) {
+            if (!position.firedUpon) {
+                square.addEventListener("click", () => {
+                    mainGameLoop(player1, player2, position.coordinate); // GOTTA FIGURE OUT HOW TO MAKE SURE IT PASSES THE RIGHT VALUE
+                });
+            }
+        } else {
+
+        };
+        
+    });
+}
+
+function updateDisplay(message) {
+    
+ 
     /* Render Human Player Board -- shows positions of all ships,
         shows where the computer has fired
         shows ships that have been hit    
@@ -23,3 +47,5 @@ function displayUpdater(message) {
         OR "Player 2 fires on E4 --- MISS" OR "Player 1 fires on E6 --- HIT"
     */
 }
+
+module.exports = updateDisplay;
