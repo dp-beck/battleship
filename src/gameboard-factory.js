@@ -1,4 +1,4 @@
-const createShip = require('./ship-factory');
+import createShip from './ship-factory';
 
 function createPosition (letter, number) {
     return {
@@ -25,13 +25,15 @@ function generateRandomShipCoordinates (length) {
     const randomShipCoordinates = [];
     const possibleLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
     const horizontalOrVertical = Math.floor(Math.random() * 2);
-    const startingLetterIndex = Math.floor(Math.random() * 10);
-    const startingNumber = Math.floor(Math.random() * (11-length)) + 1;
     if (horizontalOrVertical === 0) { // horizontal placement
+        const startingLetterIndex = Math.floor(Math.random() * 10);        
+        const startingNumber = Math.floor(Math.random() * (11-length)) + 1;
         for (let i = 0; i < length; i+=1) {
             randomShipCoordinates.push(possibleLetters[startingLetterIndex] + (startingNumber + i));
         };
     } else { // vertical placement
+        const startingLetterIndex = Math.floor(Math.random() * (11-length));
+        const startingNumber = Math.floor(Math.random() * 10 + 1);
         for (let i = 0; i < length; i+= 1) {
             randomShipCoordinates.push(possibleLetters[startingLetterIndex + i] + startingNumber);
         };
@@ -40,13 +42,12 @@ function generateRandomShipCoordinates (length) {
     return randomShipCoordinates;
 }
 
-// returns 0 if no overlap
-function testForOverlap (coordinates = []) {
-    const result = coordinates.reduce((accumulator, currentValue) => accumulator + currentValue.containsShip);
-    return result;
+// returns true if overlap
+function testForOverlap (board, coordinates = []) {
+    return coordinates.some(element1 => board.find(element2 => element2.coordinate === element1).containsShip !== null);
 }
 
-export default function createGameboard () {
+function createGameboard () {
     const board = createBoard();
     const ships = [];
     return {
@@ -61,7 +62,7 @@ export default function createGameboard () {
         },
         generateRandomShipCoordinatesNoOverlap (length) {
             let coordinates = generateRandomShipCoordinates(length);
-            while (testForOverlap(coordinates !== 0)) {
+            while (testForOverlap(this.board, coordinates)) {
                 coordinates = generateRandomShipCoordinates(length);
             };
             return coordinates;
@@ -82,4 +83,4 @@ export default function createGameboard () {
     };
 }
 
-module.exports = createGameboard;
+export { testForOverlap , createGameboard};

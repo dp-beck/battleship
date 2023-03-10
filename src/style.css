@@ -5,12 +5,88 @@ body {
   padding: 0;
 }
 
+html {
+  height: 100%;
+}
+
+body {
+  display: grid;
+  grid-template-rows: 1fr 4fr;
+  min-height: 100%;
+}
+
+header {
+  background-color: antiquewhite;
+  box-shadow: 0px 5px 10px grey;
+  height: 100px;
+}
+
+h1 {
+  text-align: center;
+  font-size: xxx-large;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 2fr 1fr;
+}
+
+footer {
+  grid-row-start: 3;
+  grid-row-end: 4;
+  text-align: center;
+  background-color: antiquewhite;
+}
+
+#startButton {
+    grid-column-start: 1;
+    grid-column-end: span 2;
+    justify-self: center;
+    align-self: center;
+    width: 200px;
+    height: 150px;
+    border-radius: 50px;
+    font-size: 50px;
+}
+
+#gameDescription {
+  grid-column-start: 1;
+  grid-column-end: span 2;
+  justify-self: center;
+  align-self: center;
+  width: 500px;
+}
+
 .boardStyle {
     border: solid black 1px;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    height: 500px;
+    width: 500px;
+    align-self: center;
+    justify-self: center;
 }
 
 .squareStyle {
+  position: relative;
   border: solid black 1px;
+  margin: none;
+  padding: none;
+  text-align: center;
+}
+
+.firedSquareStyle:after {
+  position: absolute;
+  top: 10;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  content: "\2716";
+  font-size: 30px; 
+  color: black;
+  line-height: 25px;
+  text-align: center;
 }
 
 .hitShipStyle {
@@ -23,4 +99,14 @@ body {
 
 .shipSunkStyle {
   background-color: red;
+}
+
+#messageBoard {
+  border: 2px solid black;
+  overflow-x: hidden;
+  overflow-y: auto;
+  grid-column: 1 / span 2;
+  align-self: center;
+  max-height: 150px;
+  justify-self: center;
 }

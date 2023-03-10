@@ -1,4 +1,4 @@
-const createGameboard = require('../gameboard-factory');
+import { createGameboard, testForOverlap } from '../gameboard-factory';
 
 // Create object for testing
 const board1 = createGameboard();
@@ -69,4 +69,8 @@ test('not all ships that were placed are sunk', () => {
     board1.receiveAttack('C1');
     board1.receiveAttack('D1');
     expect(board1.haveSunkAllShips()).toBe(false);
+});
+
+test('test for overlap working', () => {
+    expect(testForOverlap(board1.board, ['A1', 'A2', 'A3'])).toBe(true);
 });

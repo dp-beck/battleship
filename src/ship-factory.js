@@ -12,4 +12,3 @@ export default function createShip(name, length) {
         }
     }
 }
-module.exports = createShip;

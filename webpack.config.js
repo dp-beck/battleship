@@ -10,7 +10,6 @@ module.exports = {
     gameboardFactory: "./src/gameboard-factory.js",
     playerFactory: "./src/player-factory.js",
     gameLogic: "./src/game-logic.js",
-    displayUpdater: ".src/display-updater",
   },
   devtool: 'inline-source-map',
   devServer: {

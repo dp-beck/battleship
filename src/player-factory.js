@@ -1,10 +1,9 @@
-const createGameboard = require('./gameboard-factory');
+import { createGameboard } from './gameboard-factory';
 
 function getRandomAttackCoordinate(player) {
-    // pick random coordinate
-    const position = player.gameboard.board[Math.floor(Math.random() * 100)];
-    if (position.firedUpon) {
-        getRandomAttackCoordinate(player);
+    let position = player.gameboard.board[Math.floor(Math.random() * 100)];
+    while (position.firedUpon) {
+        position = player.gameboard.board[Math.floor(Math.random() * 100)];
     };
     return position.coordinate;
 }
@@ -14,21 +13,24 @@ function getRandomAttackCoordinate(player) {
 // just completely random
 
 export default function createPlayer(name, isComputer) {
-    const gameboard = createGameboard ();
+    const gameboard = createGameboard();
     return {
         name,
         isComputer,
         gameboard,
-        launchAttack(opponent, coordinate = getRandomAttackCoordinate(opponent)) {
+        humanLaunchAttack(opponent, coordinate) {
             opponent.gameboard.receiveAttack(coordinate);
+        },
+        computerLaunchAttack(opponent) {
+            const positionFired = getRandomAttackCoordinate(opponent);
+            opponent.gameboard.receiveAttack(positionFired);
+            return positionFired;
         },
         randomlyPlaceAllShips (ships = []) {
             ships.forEach((ship) => {
-                this.gameboard.placeShip(ship.name, ship.length, this.gameboard.generateRandomCoordinatesNoOverlap(ship.length));
+                this.gameboard.placeShip(ship.name, ship.length, this.gameboard.generateRandomShipCoordinatesNoOverlap(ship.length));
             })
        
         },
     };
 }
-
-module.exports = createPlayer;

@@ -1,7 +1,7 @@
-// import "./style.css";
-
-const createPlayer = require("./player-factory");
-const { startGame, mainGameLoop } = require('./game-logic');
+import './style.css';
+import createPlayer from "./player-factory";
+// eslint-disable-next-line import/no-cycle
+import { startGame, mainGameLoop } from './game-logic'; // Is there a way to fix this?
 
 // Create Players
 const player1 = createPlayer("Human", false);
@@ -30,9 +30,8 @@ function deleteBoards() {
 // Render a board
 function updateBoard (player) {
     const board = document.createElement("div");
-    // NOTE: NEED TO DEFINE BOARD STYLE IN CSS
     board.classList.add("boardStyle");
-    document.querySelector("body").append(board);
+    document.querySelector("main").prepend(board);
     player.gameboard.board.forEach((position) => {
         const square = document.createElement("div");
         square.classList.add("squareStyle");
@@ -47,7 +46,7 @@ function updateBoard (player) {
                 square.classList.add("hitShipStyle");
             };
             if (position.containsShip === null && position.firedUpon) {
-                square.innerText = "X";
+                square.classList.add("firedSquareStyle");
             };
         } else {
             if (position.containsShip !== null && !position.firedUpon) {
@@ -57,10 +56,10 @@ function updateBoard (player) {
                 square.classList.add("hitShipStyle");
             };
             if (position.containsShip === null && position.firedUpon) {
-                square.innerText = "X";
+                square.classList.add("firedSquareStyle");
             };
         };
-        if (player.gameboard.ships.find(element => element.name === position.containsShip).isSunk()) {
+        if (position.containsShip !==null && (player.gameboard.ships.find(element => element.name === position.containsShip).isSunk())) {
             player.gameboard.board.forEach((element) => {
                 if (element.containsShip === position.containsShip) {
                     square.classList.add("shipSunkStyle");
@@ -72,14 +71,15 @@ function updateBoard (player) {
 
 // TO DO: Message Board
 function updateMessageBoard (message) {
-    messageBoard.innerText += `\n ${message}`;
+    if (message !== undefined) {
+    messageBoard.innerText = `${message} ${messageBoard.innerText}`;
+    };
 };
 
-function updateDisplay(message) {
+export default function updateDisplay (message) {
     deleteBoards();
     updateBoard(player1);
     updateBoard(player2);
     updateMessageBoard(message);
 }
 
-module.exports = updateDisplay;
